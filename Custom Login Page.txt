@@ -1,0 +1,39 @@
+https://www.youtube.com/watch?v=P_iYWgzaRek
+
+CREATE OR REPLACE FUNCTION loginRedirectFunction(UNAME IN VARCHAR2) RETURN VARCHAR2
+AS
+	V_PAGE_ID VARCHAR2(45);
+BEGIN
+	SELECT DECODE(role_id, 1, '3', 2, '7', 3, '6', 4, '1') INTO V_PAGE_ID FROM Users WHERE lower(username) = lower(UNAME);
+	RETURN ':' || V_PAGE_ID;
+	
+	EXCEPTION WHEN NO_DATA_FOUND THEN
+		RETURN ':1';
+END loginRedirectFunction;
+
+CREATE OR REPLACE FUNCTION loginValidFunction(p_username IN VARCHAR2, p_password IN VARCHAR2) RETURN BOOLEAN
+AS
+	V_PAGE_ID VARCHAR2(45);
+	v_counter number := 0;
+	v_hash_string VARCHAR2(255);
+BEGIN
+	IF p_username IS NOT NULL AND p_password IS NOT NULL THEN
+		SELECT STANDARD_HASH(p_password, 'MD5') INTO v_hash_string FROM dual;
+		SELECT 1 INTO v_counter FROM Users WHERE LOWER(username) = LOWER(p_username) AND password = v_hash_string;
+		IF v_counter = 1 THEN
+			RETURN TRUE;
+		END IF;
+	ELSE
+		RETURN FALSE;
+	END IF;
+	
+	EXCEPTION WHEN NO_DATA_FOUND THEN
+		RETURN FALSE;
+END loginValidFunction;
+
+wwv_flow_custom_auth_std.login(
+	P_UNAME       => :P9999_USERNAME,
+	P_PASSWORD    => :P9999_PASSWORD,
+	P_SESSION_ID  => APEX_APPLICATION.get_session_id,
+	P_FLOW_PAGE   => :APP_ID || loginRedirectFunction(:P9999_USERNAME)
+);

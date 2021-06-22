@@ -1,0 +1,13 @@
+There are multiple roles: Admin, Technician, Client and Analyst.
+The first user to register on the website automatically gets admin rights. Every user to register after that gets default client access.
+Admins can access a special admin panel from where they can manage everything regarding the website and its users.
+Technician fields are created and assigned to technicians by the admins.
+Technicians are assigned by admins and can access a special page only for technicians where they can manage their appointments.
+One technician can be assigned to multiple fields and one field can have multiple technicians assigned to it.
+Clients have access to a page where they can enter their vehicle's details and choose date and time to make an appointment to a given technician.
+One technician can have multiple vehicles assigned to them and one vehicle can be assigned to multiple technicians.
+When the selected technician approves the appointment clients are not allowed to make any changes to the approved appointment.
+The vehicle which is linked to the approved appointment has its 'status' field set to 'true' meaning no more changes are allowed to the appointment.
+Clients can see in what state their vehicle appointment is in (waiting, processing, done) but cannot make any changes to the specific appointment.
+Admins can also give Analyst role to users which would allow those users to access the 'User Distribution' & 'Field Distribution' pages in read-only mode.
+Admins can access all pages regardless of any restrictions that would normally apply.

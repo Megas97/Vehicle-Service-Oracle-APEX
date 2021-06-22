@@ -1,0 +1,15 @@
+https://technology.amis.nl/software-development/development-tools/apex-creating-a-form-based-on-a-procedure/
+
+CREATE OR REPLACE PROCEDURE registerUser(i_first_name IN Users.first_name%TYPE, i_last_name IN Users.last_name%TYPE, i_phone_number IN Users.phone_number%TYPE, i_username IN Users.username%TYPE, i_password IN Users.password%TYPE)
+AS
+	v_user_count NUMBER;
+	v_hash_string VARCHAR2(255);
+BEGIN 
+	SELECT COUNT(*) INTO v_user_count FROM Users;
+	SELECT STANDARD_HASH(i_password, 'MD5') INTO v_hash_string FROM dual;
+	IF v_user_count > 0 THEN
+		INSERT INTO Users(first_name, last_name, phone_number, username, password, role_id) VALUES (i_first_name, i_last_name, i_phone_number, i_username, v_hash_string, 3);
+	ELSE
+		INSERT INTO Users(first_name, last_name, phone_number, username, password, role_id) VALUES (i_first_name, i_last_name, i_phone_number, i_username, v_hash_string, 1);
+	END IF;
+END registerUser;
